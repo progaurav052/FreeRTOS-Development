@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "FreeRTOS.h"
 #include "task.h"
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -96,8 +97,15 @@ int main(void)
   status = xTaskCreate(task1_handler,"Task-1",200,"Hello world task-1", 2,&task1_handle);
   configASSERT(status == pdPASS);
 
-  status = xTaskCreate(task1_handler,"Task-2",200,"Hello world task-2", 2,&task2_handle);
+  status = xTaskCreate(task2_handler,"Task-2",200,"Hello world task-2", 2,&task2_handle);
   configASSERT(status == pdPASS);
+
+  //start the scheduler
+  vTaskStartScheduler(); // sxheduler return only in the case it has failed to launch , internally uses xtaskcreate()
+
+  //if the control comes here the scheduler has failed to start
+  //may be returned due to insufficient memory in the heap to start the scheduler
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -305,10 +313,20 @@ static void MX_GPIO_Init(void)
 static void task1_handler(void *parameters)
 {
 
+	while(1)
+	{
+		printf("%s\n",(char*)parameters);
+		taskYIELD();
+	}
 }
 static void task2_handler(void *parameters)
 {
 
+	while(1)
+	{
+		printf("%s\n",(char*)parameters);
+		taskYIELD();
+	}
 }
 
 /* USER CODE END 4 */
