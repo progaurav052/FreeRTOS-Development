@@ -45,6 +45,8 @@
 
 /* USER CODE BEGIN PV */
 
+#define DWT_CTRL   (*(volatile uint32_t*)0xE0001000)
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -93,6 +95,13 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
+
+  //enable the cycle counting
+  DWT_CTRL |=(1<<0);
+
+  SEGGER_SYSVIEW_Conf();
+  SEGGER_SYSVIEW_Start();
+
 
   status = xTaskCreate(task1_handler,"Task-1",200,"Hello world task-1", 2,&task1_handle);
   configASSERT(status == pdPASS);
@@ -313,18 +322,24 @@ static void MX_GPIO_Init(void)
 static void task1_handler(void *parameters)
 {
 
+	char msg[100];
 	while(1)
 	{
-		printf("%s\n",(char*)parameters);
-		taskYIELD();
+		snprintf(msg,100,"%s\n",(char*)parameters);
+		//using snprint() to format the string and print using segger flavour of printf
+		SEGGER_SYSVIEW_PrintfTarget(msg);
+		taskYIELD(); //commenting out for testing prememption ..collecting trace using SEGGER
 	}
 }
 static void task2_handler(void *parameters)
 {
 
+	char msg[100];
 	while(1)
 	{
-		printf("%s\n",(char*)parameters);
+		snprintf(msg, 100, "%s\n", (char*) parameters);
+		//using snprint() to format the string and print using segger flavour of printf
+		SEGGER_SYSVIEW_PrintfTarget(msg);
 		taskYIELD();
 	}
 }
