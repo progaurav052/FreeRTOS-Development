@@ -38,4 +38,18 @@
 		<section name="ImportExportWizard.dialogBounds">
 		</section>
 	</section>
+	<section name="org.eclipse.ui.internal.dialogs.WorkbenchEditorsDialog">
+		<item key="allPersp" value="false"/>
+		<item key="sort" value="0"/>
+		<list key="bounds">
+			<item value="2480"/>
+			<item value="159"/>
+			<item value="624"/>
+			<item value="443"/>
+		</list>
+		<list key="columns">
+			<item value="199"/>
+			<item value="399"/>
+		</list>
+	</section>
 </section>

@@ -99,8 +99,9 @@ int main(void)
   //enable the cycle counting
   DWT_CTRL |=(1<<0);
 
+  // to start the recording we call the below functions:
   SEGGER_SYSVIEW_Conf();
-  SEGGER_SYSVIEW_Start();
+  SEGGER_SYSVIEW_Start(); // --> which actually starts the recording
 
 
   status = xTaskCreate(task1_handler,"Task-1",200,"Hello world task-1", 2,&task1_handle);
