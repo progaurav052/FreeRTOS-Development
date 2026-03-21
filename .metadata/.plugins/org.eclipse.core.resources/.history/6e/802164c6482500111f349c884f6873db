@@ -47,7 +47,7 @@
 	extern uint32_t SystemCoreClock;
 #endif
 
-#define configUSE_PREEMPTION			1
+#define configUSE_PREEMPTION			0 // set 1 to configure preemption , setting this to zero ... still calls the systick interrupt but scheduler wont be called
 #define configUSE_IDLE_HOOK				0
 #define configUSE_TICK_HOOK				0
 #define configCPU_CLOCK_HZ				( SystemCoreClock )
@@ -126,7 +126,7 @@ standard names. */
 #define xPortPendSVHandler PendSV_Handler
 #define xPortSysTickHandler SysTick_Handler
 
-//#include "SEGGER_SYSVIEW_FreeRTOS.h"
+#include "SEGGER_SYSVIEW_FreeRTOS.h"
 
 #endif /* FREERTOS_CONFIG_H */
 

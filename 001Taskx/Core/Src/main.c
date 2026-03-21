@@ -44,17 +44,18 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
 #define DWT_CTRL   (*(volatile uint32_t*)0xE0001000)
-
+TaskHandle_t task1_handle,task2_handle,task3_handle,task4_handle,next_task_handle;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
-static void task1_handler(void *parameters);
-static void task2_handler(void *parameters);
+static void led_green_handler(void* parameters);
+static void led_red_handler(void* parameters);
+static void led_orange_handler(void* parameters);
+static void button_press_handler(void *parameters);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -70,7 +71,6 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	TaskHandle_t task1_handle,task2_handle;
 
 	BaseType_t status;
 
@@ -104,14 +104,18 @@ int main(void)
   SEGGER_SYSVIEW_Start(); // --> which actually starts the recording
 
 
-  status = xTaskCreate(task1_handler,"Task-1",200,"Hello world task-1", 2,&task1_handle);
-  configASSERT(status == pdPASS);
-
-  status = xTaskCreate(task2_handler,"Task-2",200,"Hello world task-2", 2,&task2_handle);
-  configASSERT(status == pdPASS);
+    status = xTaskCreate(led_green_handler,"LED_GREEN_TASK", 200, NULL, 3, &task1_handle);
+    configASSERT(status == pdPASS);
+    next_task_handle=task1_handle;
+    status = xTaskCreate(led_red_handler,"LED_RED_TASK", 200, NULL, 2, &task2_handle);
+    configASSERT(status == pdPASS);
+    status = xTaskCreate(led_orange_handler,"LED_ORANGE_TASK", 200, NULL, 1, &task3_handle);
+    configASSERT(status == pdPASS);
+    status = xTaskCreate(button_press_handler,"Button_task", 200, NULL, 4, &task4_handle);
+    configASSERT(status == pdPASS);
 
   //start the scheduler
-  vTaskStartScheduler(); // sxheduler return only in the case it has failed to launch , internally uses xtaskcreate()
+   vTaskStartScheduler(); // sxheduler return only in the case it has failed to launch , internally uses xtaskcreate()
 
   //if the control comes here the scheduler has failed to start
   //may be returned due to insufficient memory in the heap to start the scheduler
@@ -129,10 +133,12 @@ int main(void)
   /* USER CODE END 3 */
 }
 
+
 /**
   * @brief System Clock Configuration
   * @retval None
   */
+
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -320,28 +326,87 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-static void task1_handler(void *parameters)
+static void led_green_handler(void* parameters)
 {
-
-	char msg[100];
+	BaseType_t status;
 	while(1)
 	{
-		snprintf(msg,100,"%s\n",(char*)parameters);
-		//using snprint() to format the string and print using segger flavour of printf
-		SEGGER_SYSVIEW_PrintfTarget(msg);
-		taskYIELD(); //commenting out for testing prememption ..collecting trace using SEGGER
+		HAL_GPIO_TogglePin(GPIOD,LED_GREEN_PIN);
+		//after this we have to wait for 1000ms
+		status = xTaskNotifyWait(0,0,NULL,pdMS_TO_TICKS(1000));
+		if(status == pdTRUE)
+		{
+			vTaskSuspendAll();
+			//action taken to resolve global taskHandle , variables update
+			next_task_handle=task2_handle;
+			xTaskResumeAll();
+			HAL_GPIO_WritePin(GPIOD, LED_GREEN_PIN, GPIO_PIN_SET);
+			vTaskDelete(NULL); // since self delete its NULL
+
+		}
 	}
 }
-static void task2_handler(void *parameters)
-{
 
-	char msg[100];
+static void led_red_handler(void* parameters)
+{
+	BaseType_t status;
 	while(1)
 	{
-		snprintf(msg, 100, "%s\n", (char*) parameters);
-		//using snprint() to format the string and print using segger flavour of printf
-		SEGGER_SYSVIEW_PrintfTarget(msg);
-		taskYIELD();
+
+		HAL_GPIO_TogglePin(GPIOD, LED_RED_PIN);
+		status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(800));
+		if (status == pdTRUE) {
+			vTaskSuspendAll();
+			next_task_handle = task3_handle;
+			xTaskResumeAll();
+			HAL_GPIO_WritePin(GPIOD, LED_RED_PIN, GPIO_PIN_SET);
+			vTaskDelete(NULL); // since self delete its NULL
+
+		}
+	}
+}
+
+static void led_orange_handler(void* parameters)
+{
+	BaseType_t status;
+	while(1)
+	{
+
+		HAL_GPIO_TogglePin(GPIOD, LED_ORANGE_PIN);
+		status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(400));
+		if (status == pdTRUE) {
+			vTaskSuspendAll();
+			next_task_handle = NULL;
+			xTaskResumeAll();
+			HAL_GPIO_WritePin(GPIOD, LED_ORANGE_PIN, GPIO_PIN_SET);
+			vTaskDelete(NULL); // since self delete its NULL
+
+		}
+	}
+}
+
+static void button_press_handler(void *parameters)
+{
+	uint8_t btn_read=0;
+	uint8_t prev_read=0;
+
+
+	while(1)
+	{
+
+		btn_read = HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0);
+		if(btn_read)
+		{
+			if(!prev_read)
+			{
+				xTaskNotify(next_task_handle,0,eNoAction);
+
+			}
+
+		}
+		prev_read=btn_read;
+		vTaskDelay(pdMS_TO_TICKS(10));
+
 	}
 }
 
