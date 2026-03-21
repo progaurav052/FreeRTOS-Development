@@ -45,7 +45,8 @@
 
 /* USER CODE BEGIN PV */
 #define DWT_CTRL   (*(volatile uint32_t*)0xE0001000)
-TaskHandle_t task1_handle,task2_handle,task3_handle,task4_handle,next_task_handle;
+TaskHandle_t task1_handle,task2_handle,task3_handle,task4_handle,next_task_handle,task5_handle;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -56,6 +57,7 @@ static void led_green_handler(void* parameters);
 static void led_red_handler(void* parameters);
 static void led_orange_handler(void* parameters);
 static void button_press_handler(void *parameters);
+static void onSuspend_handler(void *parameters);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -112,6 +114,8 @@ int main(void)
     status = xTaskCreate(led_orange_handler,"LED_ORANGE_TASK", 200, NULL, 1, &task3_handle);
     configASSERT(status == pdPASS);
     status = xTaskCreate(button_press_handler,"Button_task", 200, NULL, 4, &task4_handle);
+    configASSERT(status == pdPASS);
+    status = xTaskCreate(onSuspend_handler,"suspension_task", 200, NULL, 4, &task5_handle);
     configASSERT(status == pdPASS);
 
   //start the scheduler
@@ -341,7 +345,7 @@ static void led_green_handler(void* parameters)
 			next_task_handle=task2_handle;
 			xTaskResumeAll();
 			HAL_GPIO_WritePin(GPIOD, LED_GREEN_PIN, GPIO_PIN_SET);
-			vTaskDelete(NULL); // since self delete its NULL
+			vTaskSuspend(NULL); // since self delete its NULL
 
 		}
 	}
@@ -360,7 +364,7 @@ static void led_red_handler(void* parameters)
 			next_task_handle = task3_handle;
 			xTaskResumeAll();
 			HAL_GPIO_WritePin(GPIOD, LED_RED_PIN, GPIO_PIN_SET);
-			vTaskDelete(NULL); // since self delete its NULL
+			vTaskSuspend(NULL);// since self delete its NULL
 
 		}
 	}
@@ -376,10 +380,12 @@ static void led_orange_handler(void* parameters)
 		status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(400));
 		if (status == pdTRUE) {
 			vTaskSuspendAll();
-			next_task_handle = NULL;
+			next_task_handle = task5_handle;
 			xTaskResumeAll();
 			HAL_GPIO_WritePin(GPIOD, LED_ORANGE_PIN, GPIO_PIN_SET);
-			vTaskDelete(NULL); // since self delete its NULL
+			vTaskSuspend(NULL); // since self delete its NULL
+			 // indicates all LED
+
 
 		}
 	}
@@ -400,7 +406,6 @@ static void button_press_handler(void *parameters)
 			if(!prev_read)
 			{
 				xTaskNotify(next_task_handle,0,eNoAction);
-
 			}
 
 		}
@@ -410,6 +415,21 @@ static void button_press_handler(void *parameters)
 	}
 }
 
+static void onSuspend_handler(void *parameters)
+{
+	BaseType_t status;
+	while(1)
+	{
+		status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(10));
+		if (status == pdTRUE) {
+			vTaskResume(task1_handle);
+			vTaskResume(task2_handle);
+			vTaskResume(task3_handle);
+			next_task_handle = task1_handle;
+		}
+	}
+
+}
 /* USER CODE END 4 */
 
 /**
