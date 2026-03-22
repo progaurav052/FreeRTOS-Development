@@ -4,7 +4,7 @@
 ../Core/Src/main.c:333:13:led_green_handler	2
 ../Core/Src/main.c:354:13:led_red_handler	2
 ../Core/Src/main.c:373:13:led_orange_handler	2
-../Core/Src/main.c:394:13:button_press_handler	3
-../Core/Src/main.c:418:13:onSuspend_handler	2
-../Core/Src/main.c:443:6:HAL_TIM_PeriodElapsedCallback	2
-../Core/Src/main.c:461:6:Error_Handler	1
+../Core/Src/main.c:395:13:button_press_handler	3
+../Core/Src/main.c:419:13:onSuspend_handler	2
+../Core/Src/main.c:444:6:HAL_TIM_PeriodElapsedCallback	2
+../Core/Src/main.c:462:6:Error_Handler	1

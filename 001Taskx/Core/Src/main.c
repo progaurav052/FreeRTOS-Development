@@ -337,7 +337,7 @@ static void led_green_handler(void* parameters)
 	{
 		HAL_GPIO_TogglePin(GPIOD,LED_GREEN_PIN);
 		//after this we have to wait for 1000ms
-		status = xTaskNotifyWait(0,0,NULL,pdMS_TO_TICKS(1000));
+		status = xTaskNotifyWait(0,0,NULL,pdMS_TO_TICKS(1000)); //here the task goes to sleep for 1000 ms
 		if(status == pdTRUE)
 		{
 			vTaskSuspendAll();
@@ -358,7 +358,7 @@ static void led_red_handler(void* parameters)
 	{
 
 		HAL_GPIO_TogglePin(GPIOD, LED_RED_PIN);
-		status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(800));
+		status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(800)); // here the task goes to sleep for 800 ms
 		if (status == pdTRUE) {
 			vTaskSuspendAll();
 			next_task_handle = task3_handle;
@@ -377,9 +377,10 @@ static void led_orange_handler(void* parameters)
 	{
 
 		HAL_GPIO_TogglePin(GPIOD, LED_ORANGE_PIN);
-		status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(400));
+		status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(400));  //here the task goes to sleep for 400 ms
 		if (status == pdTRUE) {
-			vTaskSuspendAll();
+			vTaskSuspendAll(); // this suspend is needed because before the task updates the next handle if its preempted by button task .. on 2nd press again the task to be suspended will be 1st task.
+			// the above code causes the scheduler to be suspended
 			next_task_handle = task5_handle;
 			xTaskResumeAll();
 			HAL_GPIO_WritePin(GPIOD, LED_ORANGE_PIN, GPIO_PIN_SET);

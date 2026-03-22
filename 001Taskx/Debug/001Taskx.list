@@ -1346,7 +1346,7 @@ static void led_green_handler(void* parameters)
  8000aac:	4810      	ldr	r0, [pc, #64]	@ (8000af0 <led_green_handler+0x50>)
  8000aae:	f000 fce4 	bl	800147a <HAL_GPIO_TogglePin>
 		//after this we have to wait for 1000ms
-		status = xTaskNotifyWait(0,0,NULL,pdMS_TO_TICKS(1000));
+		status = xTaskNotifyWait(0,0,NULL,pdMS_TO_TICKS(1000)); //here the task goes to sleep for 1000 ms
  8000ab2:	f44f 737a 	mov.w	r3, #1000	@ 0x3e8
  8000ab6:	9300      	str	r3, [sp, #0]
  8000ab8:	2300      	movs	r3, #0
@@ -1403,7 +1403,7 @@ static void led_red_handler(void* parameters)
  8000b04:	f44f 4180 	mov.w	r1, #16384	@ 0x4000
  8000b08:	4810      	ldr	r0, [pc, #64]	@ (8000b4c <led_red_handler+0x50>)
  8000b0a:	f000 fcb6 	bl	800147a <HAL_GPIO_TogglePin>
-		status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(800));
+		status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(800)); // here the task goes to sleep for 800 ms
  8000b0e:	f44f 7348 	mov.w	r3, #800	@ 0x320
  8000b12:	9300      	str	r3, [sp, #0]
  8000b14:	2300      	movs	r3, #0
@@ -1458,7 +1458,7 @@ static void led_orange_handler(void* parameters)
  8000b60:	f44f 5100 	mov.w	r1, #8192	@ 0x2000
  8000b64:	4810      	ldr	r0, [pc, #64]	@ (8000ba8 <led_orange_handler+0x50>)
  8000b66:	f000 fc88 	bl	800147a <HAL_GPIO_TogglePin>
-		status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(400));
+		status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(400));  //here the task goes to sleep for 400 ms
  8000b6a:	f44f 73c8 	mov.w	r3, #400	@ 0x190
  8000b6e:	9300      	str	r3, [sp, #0]
  8000b70:	2300      	movs	r3, #0
@@ -1471,8 +1471,9 @@ static void led_orange_handler(void* parameters)
  8000b7e:	68fb      	ldr	r3, [r7, #12]
  8000b80:	2b01      	cmp	r3, #1
  8000b82:	d1ed      	bne.n	8000b60 <led_orange_handler+0x8>
-			vTaskSuspendAll();
+			vTaskSuspendAll(); // this suspend is needed because before the task updates the next handle if its preempted by button task .. on 2nd press again the task to be suspended will be 1st task.
  8000b84:	f002 f910 	bl	8002da8 <vTaskSuspendAll>
+			// the above code causes the scheduler to be suspended
 			next_task_handle = task5_handle;
  8000b88:	4b08      	ldr	r3, [pc, #32]	@ (8000bac <led_orange_handler+0x54>)
  8000b8a:	681b      	ldr	r3, [r3, #0]
