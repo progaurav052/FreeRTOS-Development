@@ -1376,9 +1376,9 @@ static void led_green_handler(void* parameters)
  8000acc:	4a08      	ldr	r2, [pc, #32]	@ (8000af0 <led_green_handler+0x58>)
  8000ace:	6013      	str	r3, [r2, #0]
 			//xTaskResumeAll();
-			HAL_GPIO_WritePin(GPIOD, LED_ORANGE_PIN, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOD, LED_GREEN_PIN, GPIO_PIN_SET);
  8000ad0:	2201      	movs	r2, #1
- 8000ad2:	f44f 5100 	mov.w	r1, #8192	@ 0x2000
+ 8000ad2:	f44f 5180 	mov.w	r1, #4096	@ 0x1000
  8000ad6:	4804      	ldr	r0, [pc, #16]	@ (8000ae8 <led_green_handler+0x50>)
  8000ad8:	f000 fc7a 	bl	80013d0 <HAL_GPIO_WritePin>
 			portEXIT_CRITICAL();
@@ -1435,9 +1435,9 @@ static void led_red_handler(void* parameters)
  8000b28:	4a08      	ldr	r2, [pc, #32]	@ (8000b4c <led_red_handler+0x58>)
  8000b2a:	6013      	str	r3, [r2, #0]
 			//xTaskResumeAll();
-			HAL_GPIO_WritePin(GPIOD, LED_ORANGE_PIN, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOD, LED_RED_PIN, GPIO_PIN_SET);
  8000b2c:	2201      	movs	r2, #1
- 8000b2e:	f44f 5100 	mov.w	r1, #8192	@ 0x2000
+ 8000b2e:	f44f 4180 	mov.w	r1, #16384	@ 0x4000
  8000b32:	4804      	ldr	r0, [pc, #16]	@ (8000b44 <led_red_handler+0x50>)
  8000b34:	f000 fc4c 	bl	80013d0 <HAL_GPIO_WritePin>
 			portEXIT_CRITICAL();

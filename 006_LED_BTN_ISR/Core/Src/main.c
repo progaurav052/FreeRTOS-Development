@@ -348,7 +348,7 @@ static void led_green_handler(void* parameters)
 
 			next_task_handle = task2_handle;
 			//xTaskResumeAll();
-			HAL_GPIO_WritePin(GPIOD, LED_ORANGE_PIN, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOD, LED_GREEN_PIN, GPIO_PIN_SET);
 			portEXIT_CRITICAL();
 			vTaskSuspend(NULL); // since self delete its NULL
 			// indicates all LED
@@ -372,7 +372,7 @@ static void led_red_handler(void* parameters)
 
 			next_task_handle = task3_handle;
 			//xTaskResumeAll();
-			HAL_GPIO_WritePin(GPIOD, LED_ORANGE_PIN, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(GPIOD, LED_RED_PIN, GPIO_PIN_SET);
 			portEXIT_CRITICAL();
 			vTaskSuspend(NULL); // since self delete its NULL
 			// indicates all LED
