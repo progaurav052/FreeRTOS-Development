@@ -1,0 +1,10 @@
+15:53:42 **** Incremental Build of configuration Debug for project LED_PRIORITY_SWITCH ****
+make -j10 all 
+arm-none-eabi-size  LED_PRIORITY_SWITCH.elf 
+   text	   data	    bss	    dec	    hex	filename
+  25104	     16	  84504	 109624	  1ac38	LED_PRIORITY_SWITCH.elf
+Finished building: default.size.stdout
+ 
+
+15:53:42 Build Finished. 0 errors, 0 warnings. (took 174ms)
+

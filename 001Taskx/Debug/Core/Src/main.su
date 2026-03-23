@@ -1,10 +1,10 @@
-../Core/Src/main.c:72:5:main	40	static,ignoring_inline_asm
+../Core/Src/main.c:72:5:main	32	static,ignoring_inline_asm
 ../Core/Src/main.c:146:6:SystemClock_Config	88	static
 ../Core/Src/main.c:193:13:MX_GPIO_Init	56	static
 ../Core/Src/main.c:333:13:led_green_handler	32	static
-../Core/Src/main.c:354:13:led_red_handler	32	static
-../Core/Src/main.c:373:13:led_orange_handler	32	static
-../Core/Src/main.c:395:13:button_press_handler	32	static
-../Core/Src/main.c:419:13:onSuspend_handler	32	static
-../Core/Src/main.c:444:6:HAL_TIM_PeriodElapsedCallback	16	static
-../Core/Src/main.c:462:6:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/main.c:355:13:led_red_handler	32	static
+../Core/Src/main.c:377:13:led_orange_handler	32	static
+../Core/Src/main.c:399:13:button_press_handler	32	static
+../Core/Src/main.c:423:13:onSuspend_handler	32	static
+../Core/Src/main.c:448:6:HAL_TIM_PeriodElapsedCallback	16	static
+../Core/Src/main.c:466:6:Error_Handler	4	static,ignoring_inline_asm

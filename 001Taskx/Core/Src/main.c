@@ -106,17 +106,17 @@ int main(void)
   SEGGER_SYSVIEW_Start(); // --> which actually starts the recording
 
 
-    status = xTaskCreate(led_green_handler,"LED_GREEN_TASK", 200, NULL, 3, &task1_handle);
+    status = xTaskCreate(led_green_handler,"LED_GREEN_TASK", 200, NULL, 2, &task1_handle);
     configASSERT(status == pdPASS);
     next_task_handle=task1_handle;
-    status = xTaskCreate(led_red_handler,"LED_RED_TASK", 200, NULL, 2, &task2_handle);
+    status = xTaskCreate(led_red_handler,"LED_RED_TASK", 200, NULL, 3, &task2_handle);
     configASSERT(status == pdPASS);
-    status = xTaskCreate(led_orange_handler,"LED_ORANGE_TASK", 200, NULL, 1, &task3_handle);
+    /*status = xTaskCreate(led_orange_handler,"LED_ORANGE_TASK", 200, NULL, 1, &task3_handle);
     configASSERT(status == pdPASS);
     status = xTaskCreate(button_press_handler,"Button_task", 200, NULL, 4, &task4_handle);
     configASSERT(status == pdPASS);
     status = xTaskCreate(onSuspend_handler,"suspension_task", 200, NULL, 4, &task5_handle);
-    configASSERT(status == pdPASS);
+    configASSERT(status == pdPASS);*/
 
   //start the scheduler
    vTaskStartScheduler(); // sxheduler return only in the case it has failed to launch , internally uses xtaskcreate()
@@ -348,6 +348,7 @@ static void led_green_handler(void* parameters)
 			vTaskSuspend(NULL); // since self delete its NULL
 
 		}
+		vTaskDelay(pdMS_TO_TICKS(1000));
 	}
 }
 
@@ -367,6 +368,9 @@ static void led_red_handler(void* parameters)
 			vTaskSuspend(NULL);// since self delete its NULL
 
 		}
+
+		vTaskDelay(pdMS_TO_TICKS(100));
+
 	}
 }
 
