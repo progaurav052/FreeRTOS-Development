@@ -1,27 +1,14 @@
-15:53:33 **** Incremental Build of configuration Debug for project LED_PRIORITY_SWITCH ****
+15:17:59 **** Incremental Build of configuration Debug for project Queues_n_Timers ****
 make -j10 all 
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I"/Users/ggpai/Desktop/RTOS/RTOS_workspace/LED_PRIORITY_SWITCH/ThirdParty/FreeRTOS/portable/GCC/ARM_CM4F" -I"/Users/ggpai/Desktop/RTOS/RTOS_workspace/LED_PRIORITY_SWITCH/ThirdParty/SEGGER/Config" -I"/Users/ggpai/Desktop/RTOS/RTOS_workspace/LED_PRIORITY_SWITCH/ThirdParty/SEGGER/OS" -I"/Users/ggpai/Desktop/RTOS/RTOS_workspace/LED_PRIORITY_SWITCH/ThirdParty/SEGGER/SEGGER" -I"/Users/ggpai/Desktop/RTOS/RTOS_workspace/LED_PRIORITY_SWITCH/ThirdParty/FreeRTOS/include" -I"/Users/ggpai/Desktop/RTOS/RTOS_workspace/LED_PRIORITY_SWITCH/ThirdParty/FreeRTOS" -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
-../Core/Src/main.c:58:13: warning: 'led_orange_handler' declared 'static' but never defined [-Wunused-function]
-   58 | static void led_orange_handler(void* parameters);
-      |             ^~~~~~~~~~~~~~~~~~
-../Core/Src/main.c:59:13: warning: 'onSuspend_handler' declared 'static' but never defined [-Wunused-function]
-   59 | static void onSuspend_handler(void *parameters);
-      |             ^~~~~~~~~~~~~~~~~
-arm-none-eabi-gcc -o "LED_PRIORITY_SWITCH.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/ggpai/Desktop/RTOS/RTOS_workspace/LED_PRIORITY_SWITCH/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LED_PRIORITY_SWITCH.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: LED_PRIORITY_SWITCH.elf
+arm-none-eabi-gcc "../Core/Src/task_handler.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I"/Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS" -I"/Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include" -I"/Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/portable/GCC/ARM_CM4F" -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/task_handler.d" -MT"Core/Src/task_handler.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/task_handler.o"
+arm-none-eabi-gcc -o "Queues_n_Timers.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Queues_n_Timers.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Queues_n_Timers.elf
  
-arm-none-eabi-size  LED_PRIORITY_SWITCH.elf 
-arm-none-eabi-objdump -h -S LED_PRIORITY_SWITCH.elf  > "LED_PRIORITY_SWITCH.list"
+arm-none-eabi-size  Queues_n_Timers.elf 
+arm-none-eabi-objdump -h -S Queues_n_Timers.elf  > "Queues_n_Timers.list"
    text	   data	    bss	    dec	    hex	filename
-  25104	     16	  84504	 109624	  1ac38	LED_PRIORITY_SWITCH.elf
+  27484	     16	  79000	 106500	  1a004	Queues_n_Timers.elf
 Finished building: default.size.stdout
  
-Finished building: LED_PRIORITY_SWITCH.list
- 
-15:53:42 **** Incremental Build of configuration Debug for project LED_PRIORITY_SWITCH ****
-make -j10 all 
-arm-none-eabi-size  LED_PRIORITY_SWITCH.elf 
-   text	   data	    bss	    dec	    hex	filename
-  25104	     16	  84504	 109624	  1ac38	LED_PRIORITY_SWITCH.elf
-Finished building: default.size.stdout
+Finished building: Queues_n_Timers.list
  

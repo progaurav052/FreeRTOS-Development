@@ -57,6 +57,7 @@ static void led_green_handler(void* parameters);
 static void led_red_handler(void* parameters);
 static void led_orange_handler(void* parameters);
 static void onSuspend_handler(void *parameters);
+static void do_task(UBaseType_t t1, UBaseType_t t2);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -114,7 +115,11 @@ int main(void)
     configASSERT(status == pdPASS);
     status = xTaskCreate(onSuspend_handler,"suspension_task", 200, NULL, 4, &task5_handle);
     configASSERT(status == pdPASS);
+    status = xTaskCreate(onSuspend_handler,"suspension_task", 200, NULL, 4, &task5_handle);
+    configASSERT(status == pdPASS);
     */
+    status = xTaskCreate(onSuspend_handler,"suspension_task", 200, NULL, 4, &task5_handle);
+    configASSERT(status == pdPASS);
 
   //start the scheduler
    vTaskStartScheduler(); // sxheduler return only in the case it has failed to launch , internally uses xtaskcreate()
@@ -332,32 +337,21 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 void button_interrupt_handler(){
-	xTaskNotifyFromISR(next_task_handle,0,eNoAction,NULL);
+
+
 }
+
 static void led_green_handler(void* parameters)
 {
 	BaseType_t status;
 	while(1)
 	{
-		HAL_GPIO_TogglePin(GPIOD,LED_GREEN_PIN);
-		//after this we have to wait for 1000ms
-		status = xTaskNotifyWait(0,0,NULL,pdMS_TO_TICKS(1000)); //here the task goes to sleep for 1000 ms
-		if (status == pdTRUE) {
-			//vTaskSuspendAll(); // this suspend is needed because before the task updates the next handle if its preempted by button task .. on 2nd press again the task to be suspended will be 1st task.
-			// the above code causes the scheduler to be suspended
-			portENTER_CRITICAL(); // because the next_task_handle variable is used between thread mode and interrupt mode , so we cant use the vSuspendALL , our goal is to also disable the interrupts with priority lesser than button interrupts
 
-			next_task_handle = task2_handle;
-			vTaskPrioritySet(task1_handle,uxTaskPriorityGet(task2_handle));
-			//xTaskResumeAll();
-			HAL_GPIO_WritePin(GPIOD, LED_GREEN_PIN, GPIO_PIN_SET);
-			portEXIT_CRITICAL();
-			 // since self delete its NULL
-			// indicates all LED
 
-		}
+
+
 	}
-}
+
 
 static void led_red_handler(void* parameters)
 {
@@ -365,8 +359,8 @@ static void led_red_handler(void* parameters)
 	while(1)
 	{
 
-		HAL_GPIO_TogglePin(GPIOD, LED_RED_PIN);
-		status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(100)); // here the task goes to sleep for 800 ms
+
+		/*status = xTaskNotifyWait(0, 0, NULL, pdMS_TO_TICKS(1000)); // here the task goes to sleep for 800 ms
 		if (status == pdTRUE) {
 			//vTaskSuspendAll(); // this suspend is needed because before the task updates the next handle if its preempted by button task .. on 2nd press again the task to be suspended will be 1st task.
 			// the above code causes the scheduler to be suspended
@@ -374,15 +368,15 @@ static void led_red_handler(void* parameters)
 
 			next_task_handle = task1_handle;
 			vTaskPrioritySet(task2_handle,uxTaskPriorityGet(task1_handle));
-			//xTaskResumeAll();
-			HAL_GPIO_WritePin(GPIOD, LED_RED_PIN, GPIO_PIN_SET);
-			portEXIT_CRITICAL();
+			//xTaskResumeAll();*/
+		do_task(uxTaskPriorityGet(task1_handle),uxTaskPriorityGet(task2_handle));
+			//portEXIT_CRITICAL();
 			 // since self delete its NULL
 			// indicates all LED
 
 		}
 	}
-}
+
 /*
 static void led_orange_handler(void* parameters)
 {

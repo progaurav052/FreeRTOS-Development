@@ -1,0 +1,60 @@
+/*
+ * task_handler.c
+ *
+ *  Created on: Apr 3, 2026
+ *      Author: ggpai
+ */
+
+
+#include "FreeRTOS.h"
+#include "main.h"
+
+void menu_task(void *param){
+	while(1)
+	{
+
+	}
+
+}
+void print_task(void *param)
+{
+	while(1){
+
+	}
+
+}
+void rtc_task(void *param)
+{
+	while(1){
+
+	}
+}
+void cmd_task(void *param){
+	BaseType_t ret;
+	command_t
+	while(1)
+	{
+
+		/* Implement notify wait */
+
+		ret =xTaskNotifyWait(0,0,NULL,portMAX_DELAY);
+		if(ret == pdTRUE)
+		{
+			/* Process the user data(command) stored in input data queue*/
+			process_command();
+		}
+
+
+		/*Notify the command to relevant task */
+
+
+	}
+}
+
+void led_task(void *param)
+{
+	while(1)
+	{
+
+	}
+}
