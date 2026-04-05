@@ -1,0 +1,212 @@
+/*
+ * task_handler.c
+ *
+ *  Created on: Apr 3, 2026
+ *      Author: ggpai
+ */
+
+
+#include "FreeRTOS.h"
+#include "main.h"
+
+
+uint32_t extract_command(command_t *pcmd);
+void process_command(command_t *pcmd);
+
+const char *msg_inv = "////Invalid option////\n";
+
+void menu_task(void *param){
+	//print the main task selection menu first
+	uint32_t cmd_addr;
+    command_t *cmd;
+    int option;
+	const char *taskSelectionMenu = "\n========================\n"
+									  "|         Menu         |\n"
+									  "========================\n"
+										"LED effect    ----> 0\n"
+										"Date and time ----> 1\n"
+										"Exit          ----> 2\n"
+										"Enter your choice here : ";
+
+	while(1)
+	{
+		xQueueSend(q_print_msg,&taskSelectionMenu,portMAX_DELAY);
+
+		xTaskNotifyWait(0,0,&cmd_addr,portMAX_DELAY); // infinite waiting , cmd_handle task will notify , than this task will resume here
+		cmd = (command_t*)cmd_addr; // notification value i.e the command entered (0,1,2 from main menu task selecrion will be stored in command it pointer is stored in cmd_addr)
+		if(cmd->len == 1)
+		{
+			option = cmd->payload[0] - 48;
+			switch (option) {
+			case 0:
+				curr_state = sLedEffect;
+				xTaskNotify(handle_led_task, 0, eNoAction);
+				break;
+			case 1:
+				curr_state = sRtcMenu;
+				xTaskNotify(handle_rtc_task, 0, eNoAction);
+				break;
+			case 2: /*implement exit */
+				break;
+			default:
+				xQueueSend(q_print_msg, &msg_inv, portMAX_DELAY);
+				continue;
+			}
+
+		} else {
+			//invalid entry
+			xQueueSend(q_print_msg, &msg_inv, portMAX_DELAY);
+			continue;
+		}
+
+
+		//wait till main menu is notified again
+
+		xTaskNotifyWait(0,0,NULL,portMAX_DELAY);
+
+		//other task after completing its run for one time will notify the menu task
+
+
+	}
+
+}
+void print_task(void *param)
+{
+	while(1){
+
+	}
+
+}
+void rtc_task(void *param)
+{
+	while(1){
+
+	}
+}
+void cmd_task(void *param){
+	BaseType_t ret;
+	command_t cmd;
+
+	while(1)
+	{
+
+		/* Implement notify wait */
+
+		ret =xTaskNotifyWait(0,0,NULL,portMAX_DELAY);
+		if(ret == pdTRUE)
+		{
+			/* Process the user data(command) stored in input data queue*/
+			process_command(&cmd);
+		}
+
+
+		/*Notify the command to relevant task */
+		//done in the process_command code
+
+
+
+	}
+}
+
+void led_task(void *param)
+{
+	uint32_t cmd_addr;
+	command_t *cmd;
+	const char* msg_led = "========================\n"
+						  "|      LED Effect     |\n"
+						  "========================\n"
+						  "(none,e1,e2,e3,e4)\n"
+						  "Enter your choice here : ";
+
+	while(1){
+
+		//this first notify wait is done so that task does not start executing , till its called for
+		xTaskNotifyWait(0,0,&cmd_addr,portMAX_DELAY);
+
+        xQueueSend(q_print_msg,&msg_led,portMAX_DELAY);
+
+        xTaskNotifyWait(0,0,&cmd_addr,portMAX_DELAY);
+        cmd = (command_t*)cmd_addr;
+
+		if(cmd->len <= 4)
+		{
+			if(! strcmp((char*)cmd->payload,"none"))
+				led_effect_stop();
+			else if (! strcmp((char*)cmd->payload,"e1"))
+				led_effect(1);
+			else if (! strcmp((char*)cmd->payload,"e2"))
+				led_effect(2);
+			else if (! strcmp((char*)cmd->payload,"e3"))
+				led_effect(3);
+			else if (! strcmp((char*)cmd->payload,"e4"))
+				led_effect(4);
+			else
+				xQueueSend(q_print_msg, &msg_inv, portMAX_DELAY);
+
+		}
+		else{
+			xQueueSend(q_print_msg, &msg_inv, portMAX_DELAY);
+		}
+		curr_state = sMainMenu;
+		xTaskNotify(handle_menu_task,0,eNoAction);
+
+	}
+}
+
+
+uint32_t  extract_command(command_t *pcmd)
+{
+	uint8_t item;
+	BaseType_t status;
+
+	status =uxQueueMessagesWaiting(q_user_data);
+	if(!status) return -1;
+	uint8_t i =0;
+
+	do {
+		status = xQueueReceive(q_user_data,&item,0);
+		if(status == pdTRUE)
+		{
+			pcmd->payload[i++]=item;
+
+		}
+
+	}while(item !='\n');
+	pcmd->payload[i-1]='\0';
+	pcmd->len=i-1;
+
+	return 0;
+
+}
+
+void process_command(command_t *pcmd)
+{
+	extract_command(pcmd);
+	switch(curr_state)
+	{
+
+	case sMainMenu:
+		xTaskNotify(handle_menu_task,(uint32_t)pcmd,eSetValueWithOverwrite);
+		break;
+	case sLedEffect:
+		xTaskNotify(handle_led_task,(uint32_t)pcmd,eSetValueWithOverwrite);
+		break;
+	case sRtcMenu:
+		xTaskNotify(handle_rtc_task,(uint32_t)pcmd,eSetValueWithOverwrite);
+		break;
+	case sRtcTimeConfig:
+		xTaskNotify(handle_rtc_task,(uint32_t)pcmd,eSetValueWithOverwrite);
+		break;
+	case sRtcDateConfig:
+		xTaskNotify(handle_rtc_task,(uint32_t)pcmd,eSetValueWithOverwrite);
+		break;
+	case sRtcReport:
+		xTaskNotify(handle_rtc_task,(uint32_t)pcmd,eSetValueWithOverwrite);
+		break;
+
+
+	}
+
+
+}
+

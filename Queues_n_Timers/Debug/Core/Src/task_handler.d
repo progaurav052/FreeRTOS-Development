@@ -39,7 +39,8 @@ Core/Src/task_handler.o: ../Core/Src/task_handler.c \
  /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/task.h \
  /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/list.h \
  /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/queue.h \
- /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/task.h
+ /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/task.h \
+ /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/timers.h
 /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/FreeRTOS.h:
 /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/FreeRTOSConfig.h:
 /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/projdefs.h:
@@ -82,3 +83,4 @@ Core/Src/task_handler.o: ../Core/Src/task_handler.c \
 /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/list.h:
 /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/queue.h:
 /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/task.h:
+/Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/timers.h:

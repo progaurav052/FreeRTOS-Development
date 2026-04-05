@@ -39,7 +39,8 @@ Core/Src/stm32f4xx_hal_msp.o: ../Core/Src/stm32f4xx_hal_msp.c \
  /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/task.h \
  /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/list.h \
  /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/queue.h \
- /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/task.h
+ /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/task.h \
+ /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/timers.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -82,3 +83,4 @@ Core/Src/stm32f4xx_hal_msp.o: ../Core/Src/stm32f4xx_hal_msp.c \
 /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/list.h:
 /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/queue.h:
 /Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/task.h:
+/Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include/timers.h:

@@ -1,17 +1,10 @@
-15:17:59 **** Incremental Build of configuration Debug for project Queues_n_Timers ****
+13:37:33 **** Incremental Build of configuration Debug for project Queues_n_Timers ****
 make -j10 all 
-arm-none-eabi-gcc "../Core/Src/task_handler.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I"/Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS" -I"/Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/include" -I"/Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/ThirdParty/FreeRTOS/portable/GCC/ARM_CM4F" -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/task_handler.d" -MT"Core/Src/task_handler.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/task_handler.o"
-arm-none-eabi-gcc -o "Queues_n_Timers.elf" @"objects.list"   -mcpu=cortex-m4 -T"/Users/ggpai/Desktop/RTOS/RTOS_workspace/Queues_n_Timers/STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Queues_n_Timers.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: Queues_n_Timers.elf
- 
 arm-none-eabi-size  Queues_n_Timers.elf 
-arm-none-eabi-objdump -h -S Queues_n_Timers.elf  > "Queues_n_Timers.list"
    text	   data	    bss	    dec	    hex	filename
-  27484	     16	  79000	 106500	  1a004	Queues_n_Timers.elf
+  30556	     28	  79028	 109612	  1ac2c	Queues_n_Timers.elf
 Finished building: default.size.stdout
  
-Finished building: Queues_n_Timers.list
- 
 
-15:18:01 Build Finished. 0 errors, 0 warnings. (took 1s.737ms)
+13:37:33 Build Finished. 0 errors, 0 warnings. (took 182ms)
 

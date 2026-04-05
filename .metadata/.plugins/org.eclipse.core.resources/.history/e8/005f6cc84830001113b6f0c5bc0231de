@@ -1,0 +1,15 @@
+/*
+ * led_effect.c
+ *
+ *  Created on: Apr 3, 2026
+ *      Author: ggpai
+ */
+#include "main.h"
+
+void led_effect_stop(void)
+{
+	for(int i=0;i<4;i++)
+	{
+		xTimerStop
+	}
+}

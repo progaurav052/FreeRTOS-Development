@@ -37,6 +37,7 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "timers.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -64,6 +65,9 @@ extern TaskHandle_t handle_print_task;
 extern TaskHandle_t handle_led_task;
 extern TaskHandle_t handle_rtc_task;
 extern QueueHandle_t q_user_data,q_print_msg;
+extern TimerHandle_t handle_led_timer[4];
+extern UART_HandleTypeDef huart2;
+
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -86,6 +90,14 @@ void led_task(void *param);
 void print_task(void *param);
 void cmd_task(void *param);
 void rtc_task(void *param);
+
+void led_effect_stop(void);
+void led_effect(int n);
+
+void LED_effect1(void);
+void LED_effect2(void);
+void LED_effect3(void);
+void LED_effect4(void);
 
 /* USER CODE END EFP */
 
@@ -158,7 +170,10 @@ void rtc_task(void *param);
 #define MEMS_INT2_GPIO_Port GPIOE
 
 /* USER CODE BEGIN Private defines */
-
+#define LED1  LD4_Pin
+#define LED2  LD3_Pin
+#define LED3  LD5_Pin
+#define LED4  LD6_Pin
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

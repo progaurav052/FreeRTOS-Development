@@ -47,9 +47,11 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 #define DWT_CTRL   (*(volatile uint32_t*)0xE0001000)  //DWT is downcounter uswesd for timestamps which are used in SEGGER view , not usefull for this project
 
+
 state_t curr_state = sMainMenu;
 TaskHandle_t  handle_menu_task,handle_cmd_task,handle_print_task,handle_led_task,handle_rtc_task;
 QueueHandle_t q_user_data,q_print_msg;
+TimerHandle_t handle_led_timer[4];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -58,6 +60,7 @@ static void MX_GPIO_Init(void);
 static void MX_RTC_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
+void led_effect_callback(TimerHandle_t xTimer);
 
 /* USER CODE END PFP */
 
@@ -112,8 +115,9 @@ int main(void)
   status = xTaskCreate(led_task,"led_task", 250,NULL,2, &handle_led_task);
   configASSERT(status == pdPASS);
 
-  status = xTaskCreate(rtc_task,"rtc_task", 250,NULL,2, &handle_rtc_task);
+  /*status = xTaskCreate(rtc_task,"rtc_task", 250,NULL,2, &handle_rtc_task);
   configASSERT(status == pdPASS);
+  */
 
   q_user_data = xQueueCreate(10,sizeof(char)); //creates an queue dynamically
   configASSERT(q_user_data !=NULL);
@@ -122,8 +126,16 @@ int main(void)
   configASSERT(q_print_msg !=NULL);
 
 
+  //create 4 s/w timers
+  for(uint8_t i=0;i<4;i++)
+  {
+	  handle_led_timer[i]=xTimerCreate("led_timer",pdMS_TO_TICKS(500), pdTRUE,(void*)(i+1),led_effect_callback);
+	  //callback is called when the timer expires
 
-  HAL_UART_Receive_IT(&huart2, &user_data,1);
+  }
+
+
+  HAL_UART_Receive_IT(&huart2, (uint8_t *)&user_data,1);
 
   vTaskStartScheduler();
 
@@ -402,6 +414,29 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void led_effect_callback(TimerHandle_t xTimer)
+{
+	 int id;
+	 id = ( uint32_t ) pvTimerGetTimerID( xTimer );
+
+	 switch(id)
+	 {
+	 case 1 :
+		 LED_effect1(); // has the logic to turn of and all leds
+		 break;
+	 case 2:
+		 LED_effect2();
+		 break;
+	 case 3:
+		 LED_effect3();
+		 break;
+	 case 4:
+		 LED_effect4();
+	 }
+
+
+}
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	//before this enable data reception
@@ -412,13 +447,16 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	//whenever the data byte is recived this gets executed
 	//store the data byte into the data queue
 	//when '\n' is detected , notify the command handling task
+    if (user_data == '\r')
+    {
+        HAL_UART_Receive_IT(&huart2, (uint8_t*)&user_data, 1);
+        return;
+    }
 
 	if(xQueueIsQueueFullFromISR(q_user_data)==pdFALSE)
 	{
 			/*Queue is not full */
-
-			/*TODO: Enqueue data byte */
-		    xQueueSendFromISR(q_user_data,(void*)&user_data,NULL);
+		    xQueueSendToBackFromISR(q_user_data,(void*)&user_data,NULL);
 
 	}else{
 			/*Queue is full */
@@ -431,15 +469,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	}
 
 
-	/*TODO: send notification to command handling task if user_data = '\n' */
-
 	if(user_data == '\n')
 	{
 		xTaskNotifyFromISR(handle_cmd_task,0,eNoAction,NULL);
 
 	}
 
-	HAL_UART_Receive_IT(&huart2, &user_data,1); //since it gets disabled , we enable it back
+	HAL_UART_Receive_IT(&huart2, (uint8_t*)&user_data,1); //since it gets disabled , we enable it back
 
 }
 
